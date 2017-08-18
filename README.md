@@ -7,6 +7,7 @@ This comes with:
 1. R with hadleyverse packages and other important packages 
 2. Python 3 with xgboost, light, catboost, tensorflow, theano, keras, MXNet and so on...
 3. Standalone spark 2.1.1
+4. Configured R on IPython notebook
 
 Follow below instructions to create a docker machine
 
