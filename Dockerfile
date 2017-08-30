@@ -85,11 +85,22 @@ RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git \
 COPY InstallRPackages.R /home/files/InstallRPackages.R
 RUN R -e 'source("/home/files/InstallRPackages.R")'
 
+# Catboost for R
 RUN cd /tmp \
 	&& git clone https://github.com/catboost/catboost.git \
 	&& cd ./catboost/catboost/R-package \
 	&& R -e 'devtools::install()'
 
+# LightGBM for R
+RUN apt-get update \
+	&& apt-get install cmake \
+	&& git clone --recursive https://github.com/Microsoft/LightGBM  \
+	&& cd LightGBM \
+	&& mkdir build \ 
+	&& cd build \
+	&& cmake .. \
+	&& make -j4
+	
 WORKDIR /home/data
 
 

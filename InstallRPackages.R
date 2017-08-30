@@ -13,7 +13,6 @@ install_github("dahtah/imager")
 install_github("elbamos/largevis", ref="develop")  # Using development branch for now, see https://github.com/elbamos/largeVis/issues/40
 install_github("dgrtwo/widyr")
 install_github("rstudio/leaflet")
-install_github("Microsoft/LightGBM", subdir = "R-package")
 install.packages("xgboost", repos=c("http://dmlc.ml/drat/", getOption("repos")), type="source")
 install_github("rstudio/tensorflow")
 install_github("rstudio/sparklyr")
