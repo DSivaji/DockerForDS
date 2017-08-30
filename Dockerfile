@@ -27,6 +27,7 @@ RUN	cd /home/files/ \
 RUN	cd /tmp/ && wget https://repo.continuum.io/archive/Anaconda3-4.4.0-Linux-x86_64.sh
 
 RUN /bin/bash /tmp/Anaconda3-4.4.0-Linux-x86_64.sh -b -p /opt/conda
+	
 ENV PATH /opt/conda/bin:$PATH
 
 RUN cd /home/files \
@@ -36,11 +37,13 @@ RUN cd /usr/local/src \
 	&& conda update --all
 	
 # Spark Instlation
-RUN	cd /home/spark \
+RUN	cd /tmp/ \
 	&& wget https://d3kbcqa49mib13.cloudfront.net/spark-2.1.1-bin-hadoop2.7.tgz \
 	&& tar -xvzf spark-2.1.1-bin-hadoop2.7.tgz -C /usr/local \
     && rm spark-2.1.1-bin-hadoop2.7.tgz \
-	&& cd /usr/local && ln -s spark-2.1.1-bin-hadoop2.7 spark
+	&& cd /usr/local && ln -s spark-2.1.1-bin-hadoop2.7 spark \
+	&& rm -rf /tmp/* \
+	&& rm -rf /root/.cache/*
 
 ENV SPARK_HOME /usr/local/spark
 ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip
@@ -56,6 +59,7 @@ RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git \
 	&& wget https://bootstrap.pypa.io/get-pip.py \
 	&& python get-pip.py \
 	&& pip install mxnet \
+	&& conda install dask \
 	&& apt-get install -y graphviz \
 	&& pip install graphviz \
     && mkdir -p /usr/share/nltk_data \
@@ -80,6 +84,11 @@ RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git \
 	
 COPY InstallRPackages.R /home/files/InstallRPackages.R
 RUN R -e 'source("/home/files/InstallRPackages.R")'
+
+RUN cd /tmp \
+	&& git clone https://github.com/catboost/catboost.git \
+	&& cd ./catboost/catboost/R-package \
+	&& R -e 'devtools::install()'
 
 WORKDIR /home/data
 

@@ -1,4 +1,6 @@
-install.packages(c('rstan','shinystan','rstanarm','RODBC','RJDBC','lsmeans','xgboost','RLightGBM','caret'),dep=T, repo = 'https://cran.rstudio.com')
+Sys.setenv(MAKEFLAGS = "-j4") 
+install.packages(c("Rcpp", "rstan"), type = "source")
+install.packages(c('shinystan','rstanarm','RODBC','RJDBC','lsmeans','xgboost','RLightGBM','caret'),dep=T, repo = 'https://cran.rstudio.com')
 library(devtools)
 install_github("hadley/xml2")
 install_github("slowkow/ggrepel")
