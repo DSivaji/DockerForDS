@@ -53,7 +53,7 @@ RUN R -e "devtools::install_github('apache/spark@v2.1.1', subdir='R/pkg')"
 # Python packages	
 RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git \
 	&& conda install -y -c https://conda.anaconda.org/amueller wordcloud \
-	&& pip install findspark tensorflow folium keras python-igraph chainer textblob fbprophet stop-words h2o lightgbm catboost pymssql mxnet graphviz\
+	&& pip install findspark tensorflow folium tffm keras python-igraph chainer textblob fbprophet stop-words h2o lightgbm catboost pymssql mxnet graphviz\
 	&& conda install -y -c conda-forge xgboost
 
 # Catboost for R
@@ -67,13 +67,15 @@ RUN cd /tmp \
 	&& git clone --recursive https://github.com/Microsoft/LightGBM \
 	&& cd LightGBM/R-package \
 	&& R CMD INSTALL --build . --no-multiarch
-	
+
+# cleaning vm
 RUN mkdir -p /usr/share/nltk_data \
     && python -m nltk.downloader -d /usr/share/nltk_data all \
     && rm -rf /root/.cache/pip/* \
     && apt-get autoremove -y && apt-get clean \
     && rm -rf /usr/local/src/*
 
+# Install All required R packages
 COPY InstallRPackages.R /home/files/InstallRPackages.R
 RUN R -e 'source("/home/files/InstallRPackages.R")'
 
