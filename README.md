@@ -12,7 +12,7 @@ This comes with:
 Follow below instructions to create a docker machine
 
 #### Create a docker machine #
-``` docker-machine create -d virtualbox --virtualbox-cpu-count=6 --virtualbox-memory=24000 --virtualbox-disk-size=50000 default ```
+``` docker-machine create -d virtualbox --virtualbox-cpu-count=8 --virtualbox-memory=28000 --virtualbox-disk-size=50000 default ```
 
 Build a docker from the dockerfile
 

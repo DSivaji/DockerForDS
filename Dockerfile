@@ -11,11 +11,11 @@ RUN	cd /home \
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH /usr/lib/jvm/java-8-openjdk-amd64:$PATH
 ENV LD_LIBRARY_PATH /usr/lib/jvm/java-8-openjdk-amd64/lib/amd64:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server
-ENV _JAVA_OPTIONS "-Xms20000m -Xmx20000m"
+ENV _JAVA_OPTIONS "-Xms24000m -Xmx24000m"
 
 # system update and base libraries
 RUN	apt-get update \
-	&& apt-get install -y --fix-missing zip wget cmake bzip2 ca-certificates libzmq3-dev libglib2.0-0 libxext6 libsm6 libxrender1 git mercurial subversion libfontconfig1 libxml2-dev libcairo2-dev libxt-dev libudunits2-dev libjpeg-dev freetds-dev libfreetype6-dev graphviz\
+	&& apt-get install -y --fix-missing zip wget gawk cmake sqlite3 libsqlite3-dev bzip2 ca-certificates libzmq3-dev libglib2.0-0 libxext6 libsm6 libxrender1 git mercurial subversion libfontconfig1 libxml2-dev libcairo2-dev libxt-dev libudunits2-dev libjpeg-dev freetds-dev libfreetype6-dev graphviz\
 	&& R CMD javareconf \
 	&& apt-get install -y r-cran-rjava 
 
@@ -49,7 +49,7 @@ ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip
 
 # SparkR Packages
 RUN R -e "devtools::install_github('apache/spark@v2.1.1', subdir='R/pkg')"
-	
+
 # Python packages	
 RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git \
 	&& conda install -y -c https://conda.anaconda.org/amueller wordcloud \
@@ -78,5 +78,8 @@ RUN mkdir -p /usr/share/nltk_data \
 # Install All required R packages
 COPY InstallRPackages.R /home/files/InstallRPackages.R
 RUN R -e 'source("/home/files/InstallRPackages.R")'
+
+RUN conda install -y nb_conda_kernels \
+	&& conda create -n py27 -y python=2.7 ipykernel numpy pandas scikit-learn matplotlib
 
 WORKDIR /home/data
